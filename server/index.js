@@ -21,7 +21,7 @@ const pgClient = new Pool({
 pgClient.on("error", console.error);
 
 pgClient
-  .query("CREATE TABLE IF NOT EXISTS values (number INT)")
+  .query("CREATE TABLE IF NOT EXISTS indexes (number INT)")
   .catch(console.error);
 
 // Redis
@@ -38,25 +38,25 @@ app.get("/", (req, res) => {
   res.send("Hi");
 });
 
-app.get("/values/all", async (req, res) => {
-  const values = await pgClient.query("SELECT * FROM values");
-  res.send(values.rows);
-});
-
-app.get("/values/current", async (req, res) => {
+app.get("/values", async (req, res) => {
   redisClient.hgetall("values", (err, values) => {
     res.send(values);
   });
 });
 
-app.post("/values", async (req, res) => {
+app.get("/indexes", async (req, res) => {
+  const indexes = await pgClient.query("SELECT * FROM indexes");
+  res.send(indexes.rows);
+});
+
+app.post("/indexes", async (req, res) => {
   const index = +req.body.index;
   if (index > 40) {
     return res.status(422).send("Index too high");
   }
 
   redisPublisher.publish("insert", index);
-  pgClient.query("INSERT INTO values(number) VALUES($1)", [index]);
+  pgClient.query("INSERT INTO indexes(number) VALUES($1)", [index]);
 
   res.sendStatus(202);
 });
