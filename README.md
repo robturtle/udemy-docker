@@ -1,5 +1,33 @@
 ![Travis CI](https://travis-ci.org/robturtle/udemy-docker.svg?branch=master)
 
+## Some tricks
+### Create a test script
+
+1. First fire up the dev server: `docker-compose up --build`.
+2. Then find out the container name by `docker ps` (I will refer it as `$NAME`).
+3. Create a file `./test`
+
+    ```bash
+    #!/bin/bash
+
+    docker exec -it $(docker ps -aqf 'name=$NAME') npm run test
+    ```
+
+    ```bash
+    $ chmod +x ./test
+    ```
+
+4. To run the test, start the dev server first by `docker-compose up --build`, then `./test`. You can control the test with the stdin.
+
+**FIXME**: The `o` option will fail right now. Possibly related to Docker volume config.
+
+------
+------
+------
+
+
+## Original README
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
