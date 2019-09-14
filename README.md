@@ -21,10 +21,17 @@
 
 **FIXME**: The `o` option will fail right now. Possibly related to Docker volume config.
 
-------
-------
-------
+### Fasten Travis CI
+Add this so that Travis CI will not setup Ruby environment.
+```yml
+language: generic
+```
 
+
+
+------
+------
+------
 
 ## Original README
 
