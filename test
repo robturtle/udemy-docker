@@ -1,3 +1,0 @@
-#!/bin/bash
-
-docker exec -it $(docker ps -aqf 'name=client_web_1') npm run test
