@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-class Fib extends Component {
+export default class Fib extends Component {
   state = {
     seenIndexes: [],
     values: {},
@@ -21,5 +21,51 @@ class Fib extends Component {
   async fetchIndexes() {
     const seenIndexes = await axios.get("/api/indexes");
     this.setState({ seenIndexes: seenIndexes.data });
+  }
+
+  renderSelectedIndexes() {
+    return this.state.seenIndexes.map(({ number }) => number).join(", ");
+  }
+
+  renderValues() {
+    const entries = [];
+
+    for (let key in this.state.values) {
+      entries.push(
+        <div key={key}>
+          For index {key} I calculated {this.state.values[key]}
+        </div>
+      );
+    }
+
+    return entries;
+  }
+
+  handleSubmit = async event => {
+    event.preventDefault();
+
+    await axios.post("/api/indexes", {
+      index: this.state.index
+    });
+    this.setState({ index: "" });
+  };
+
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label>Enter your index:</label>
+          <input
+            value={this.state.index}
+            onChange={event => this.setState({ index: event.target.value })}
+          />
+          <button>Submit</button>
+        </form>
+
+        <h3>Indexes I have seen:</h3>
+        {this.renderSelectedIndexes()}
+        {this.renderValues()}
+      </div>
+    );
   }
 }
