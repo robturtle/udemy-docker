@@ -19,3 +19,17 @@ after_success:
   - docker push robturtle/udemy-docker-nginx
   - docker push robturtle/udemy-docker-server
   - docker push robturtle/udemy-docker-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-west-1"
+  app: "udemy-docker"
+  env: "UdemyDocker-env"
+  bucket_name: "elasticbeanstalk-us-west-1-402467898701"
+  bucket_path: "udemy-docker"
+  on:
+    branch: master
+  access_key_id:
+    secure: "$AWS_ACCESS_KEY"
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
