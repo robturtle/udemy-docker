@@ -10,15 +10,7 @@ script:
   - docker run -e CI=true robturtle/client-test npm test
 
 after_success:
-  - docker build -t robturtle/udemy-docker-client ./client
-  - docker build -t robturtle/udemy-docker-nginx ./nginx
-  - docker build -t robturtle/udemy-docker-server ./server
-  - docker build -t robturtle/udemy-docker-worker ./worker
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push robturtle/udemy-docker-client
-  - docker push robturtle/udemy-docker-nginx
-  - docker push robturtle/udemy-docker-server
-  - docker push robturtle/udemy-docker-worker
+  - ./scripts/deploy
 
 # deploy:
 #   provider: elasticbeanstalk

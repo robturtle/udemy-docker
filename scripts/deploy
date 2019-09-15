@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function build() {
+  tag="robturtle/udemy-docker-$1:$(cat ./$1/version)"
+  docker build -t $tag ./$1
+  docker tag $tag robturtle/udemy-docker-$1:latest
+  docker push "robturtle/udemy-docker-$1"
+}
+
+if echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin; then
+  build client
+  build nginx
+  build server
+  build worker
+fi
