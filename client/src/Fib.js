@@ -15,26 +15,22 @@ export default class Fib extends Component {
 
   async fetchValues() {
     const values = await axios.get("/api/values");
-    if (typeof values === "string") {
+    if (typeof values !== "string") {
       // the standalone image will also handle `/api/*` calls so
       // axios.get will return the webpage document instead of the
       // JSON object we expected.
-      return;
+      this.setState({ values: values.data });
     }
-
-    this.setState({ values: values.data });
   }
 
   async fetchIndexes() {
     const seenIndexes = await axios.get("/api/indexes");
-    if (typeof seenIndexes === "string") {
+    if (typeof seenIndexes !== "string") {
       // the standalone image will also handle `/api/*` calls so
       // axios.get will return the webpage document instead of the
       // JSON object we expected.
-      return;
+      this.setState({ seenIndexes: seenIndexes.data });
     }
-
-    this.setState({ seenIndexes: seenIndexes.data });
   }
 
   renderSelectedIndexes() {
@@ -47,7 +43,7 @@ export default class Fib extends Component {
     for (let key in this.state.values) {
       entries.push(
         <div key={key}>
-          index: {key},  value: {this.state.values[key]}
+          index: {key}, value: {this.state.values[key]}
         </div>
       );
     }
