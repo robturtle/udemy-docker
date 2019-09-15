@@ -15,7 +15,7 @@ export default class Fib extends Component {
 
   async fetchValues() {
     const values = await axios.get("/api/values");
-    if (typeof values !== "string") {
+    if (typeof values.data !== "string") {
       // the standalone image will also handle `/api/*` calls so
       // axios.get will return the webpage document instead of the
       // JSON object we expected.
@@ -25,7 +25,7 @@ export default class Fib extends Component {
 
   async fetchIndexes() {
     const seenIndexes = await axios.get("/api/indexes");
-    if (typeof seenIndexes !== "string") {
+    if (typeof seenIndexes.data !== "string") {
       // the standalone image will also handle `/api/*` calls so
       // axios.get will return the webpage document instead of the
       // JSON object we expected.
