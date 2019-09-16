@@ -2,15 +2,29 @@ language: generic
 sudo: required
 services:
   - docker
+env:
+  global:
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
 before_install:
+  - curl https://sdk.cloud.google.com | bash > /dev/null
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  - gcloud components update kubectl
+  - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service-account.json.enc -out service-account.json -d
+  - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud config set project udemy-docker-253101
+  - gcloud config set compute/zone us-west2-a
+  - gcloud container clusters get-credentials udemy-docker
   - docker build -f ./client/Dockerfile.dev -t robturtle/client-test ./client
 
 script:
   - docker run -e CI=true robturtle/client-test npm test
 
-after_success:
-  - ./scripts/deploy
+deploy:
+  provider: script
+  script: ./scripts/deploy
+  on:
+    branch: master
 
 # NOTE: AWS was deleted to avoid the bill.
 # deploy:
