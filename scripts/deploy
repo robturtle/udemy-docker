@@ -1,22 +1,16 @@
 #!/bin/bash
 
-kubectl apply -f ./k8s
-
 SHA=`git rev-parse HEAD`
 
-function build() {
-  image="robturtle/udemy-docker-$1"
-  version=$image:`cat ./$1/version`
-  tag=$image:$SHA
-  docker build -t $tag -t $version -t $image:latest ./$1
-  docker push $image:latest
-  docker push $version
-  docker push $tag
-  kubectl set image deployments/$1-deployment $1=$tag
+function deploy() {
+  kubectl set image deployments/$1-deployment $1="robturtle/udemy-docker-$1:$SHA"
 }
 
-if echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin; then
-  build client
-  build server
-  build worker
+if ./scripts/build $SHA; then
+
+  kubectl apply -f ./k8s
+
+  deploy client
+  deploy server
+  deploy worker
 fi
