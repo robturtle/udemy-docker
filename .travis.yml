@@ -12,6 +12,7 @@ script:
 after_success:
   - ./scripts/deploy
 
+# NOTE: AWS was deleted to avoid the bill.
 # deploy:
 #   provider: elasticbeanstalk
 #   region: "us-west-1"
