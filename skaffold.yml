@@ -12,7 +12,24 @@ build:
         '**/*.js': .
         '**/*.css': .
         '**/*.html': .
+
+    - image: robturtle/udemy-docker-server
+      context: ./server
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        '**/*.js': .
+
+    - image: robturtle/udemy-docker-worker
+      context: ./worker
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        '**/*.js': .
+
 deploy:
   kubectl:
     manifests:
       - k8s/client-deployment.yml
+      - k8s/server-deployment.yml
+      - k8s/worker-deployment.yml
