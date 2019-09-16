@@ -2,10 +2,6 @@
 
 TAG=$1
 
-function docker_tag_exists() {
-  curl --silent -f -lSL https://index.docker.io/v1/repositories/$1/tags/$2 > /dev/null
-}
-
 function build() {
   image="robturtle/udemy-docker-$1"
 
@@ -15,13 +11,9 @@ function build() {
     tag=$image:`cat ./$1/version`
   fi
 
-  if docker_tag_exists $tag; then
-    echo "DockerHub tag $TAG already exists. Skipping build."
-  else
-    docker build -t $tag -t $image:latest ./$1
-    docker push $tag
-    docker push $image:latest
-  fi
+  docker build -t $tag -t $image:latest ./$1
+  docker push $tag
+  docker push $image:latest
 }
 
 if echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin; then
