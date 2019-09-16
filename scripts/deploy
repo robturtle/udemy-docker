@@ -9,7 +9,9 @@ function build() {
   version=$image:`cat ./$1/version`
   tag=$image:$SHA
   docker build -t $tag -t $version -t $image:latest ./$1
-  docker push $image:latest $version $tag
+  docker push $image:latest
+  docker push $version
+  docker push $tag
   kubectl set image deployments/$1-deployment $1=$tag
 }
 
