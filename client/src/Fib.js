@@ -74,6 +74,7 @@ export default class Fib extends Component {
 
         <h3>Indexes I have seen:</h3>
         {this.renderSelectedIndexes()}
+        <h3>Values computed:</h3>
         {this.renderValues()}
       </div>
     );
